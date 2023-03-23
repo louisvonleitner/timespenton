@@ -262,7 +262,7 @@ current_project_display = ttk.Label(master=root, text=f"current project: {curren
 current_project_display.place(x=15, y=20)
 
 
-#buttons
+# calling buttons
 start_timer_button()
 change_time_unit_button()
 add_time_manually_btn()
