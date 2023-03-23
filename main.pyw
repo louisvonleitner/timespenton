@@ -235,6 +235,7 @@ def add_time_manually_button():
     entry_label_start_time.place(x=45, y=110)
 
     entry_field_project = ttk.Entry(master=window, width=30)
+    entry_field_project.insert(0, current_project)
     entry_field_project.place(x=60, y=150)
 
     entry_label_project = ttk.Label(master=window, text="project:")
