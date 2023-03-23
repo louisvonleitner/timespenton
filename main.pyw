@@ -12,7 +12,7 @@ active = False
 pause = False
 internim_result = 0
 
-
+# get last used project name
 def get_current_project():
     global current_project
     f = open("time_spent_coding.csv", "r")
@@ -21,7 +21,7 @@ def get_current_project():
     help_list = last_line.split(";")
     current_project = help_list[-1]
 
-
+# creating a list of lists of times spent
 def get_from_file():
     time_spent_global.clear()
     f = open("time_spent_coding.csv", "r")
@@ -32,7 +32,7 @@ def get_from_file():
 
     return time_spent_global
 
-
+# sum up time spent from csv file
 def time_spent_list_calculation():
     time_spent = 0
     time_spent_global = get_from_file()
@@ -41,22 +41,23 @@ def time_spent_list_calculation():
 
     return time_spent
 
-
+# counting seconds
 def time_elapsed_seconds():
     elapsed = time.time() - start_time + internim_result
     return elapsed
 
-
+# convert seconds in ISO8601 format
 def time_format_from_seconds(seconds):
     t = str(timedelta(seconds=seconds))
     return t
 
-
+# convert ISO8601 format to seconds
 def time_format_to_seconds(ISO8601):
-   d, h, m, s = ISO8601.split(":")
+   d, rest = ISO8601.split(" days, ")
+   h, m, s = rest.split(":")
    return int(d) * 86400 + int(h) * 3600 + int(m) * 60 + int(s)
 
-
+# save time spent in csv file in correct format
 def write_to_file():
     f = open("time_spent_coding.csv", "a")
 
@@ -98,7 +99,7 @@ def pause_time_button():
     btn_pause_timer.destroy()
     start_timer_button()
 
-
+# counting time since pause started and updating display
 def pause_updater():
     global pause_start_time
     global pause_elapsed_label
@@ -110,7 +111,7 @@ def pause_updater():
 
     root.after(1000, pause_updater)
 
-
+# starting counter
 def start_time_button():
     global active
     global start_time
@@ -127,7 +128,7 @@ def start_time_button():
     total_time_counter()
     pause_timer_button()
 
-
+# stopping counter, resetting metrics and saving to file
 def stop_time_button():
     global active
     global stop_datetime
@@ -146,7 +147,7 @@ def stop_time_button():
         btn_pause_timer.destroy()
         start_timer_button()
 
-
+# updating counter display
 def counter():
     if active:
         global elapsed_seconds
@@ -158,7 +159,7 @@ def counter():
         time_display.configure(text=elapsed)
         root.after(1000, counter)
 
-
+# pudating total counter display
 def total_time_counter():
     if active:
         total_time_spent = time_spent + int(time_elapsed_seconds())
@@ -169,12 +170,13 @@ def total_time_counter():
         total_time_display.configure(text=total_time_spent)
     root.after(1000, total_time_counter)
 
+
 def change_time_unit_button():
     global change_unit_btn
     change_unit_btn = ttk.Button(master=root, text="show time in seconds", command=unit_changer)
     change_unit_btn.place(x=50, y=50)
 
-
+# managing unit change and button change
 def unit_changer():
     global unit
     if unit == "s":
@@ -210,14 +212,14 @@ def change_project_button():
     btn_change_project = ttk.Button(master=root, text="change project", command=change_project)
     btn_change_project.place(x=300, y=270)
 
-
+# change current_project
 def change_project_get_entry():
     global current_project
     current_project = input_field.get()
     window.destroy()
     current_project_display.config(text=f"current project: {current_project}")
 
-
+# window to change project
 def change_project():
     global input_field
     global window
